@@ -4,7 +4,6 @@ __pycache__/
 env/
 myEnv/
 *.pyc
-*.sqlite3
 *.rdb
 *.db
 Intermediate Work/.DS_Store
@@ -32,6 +31,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-Intermediate Work/Code/backend/application/env_keys.py
-Intermediate Work/Code/backend/application/.env
+iw/Code/backend/application/env_keys.py
+iw/Code/backend/application/.env
 m6/application/.env
