@@ -45,5 +45,5 @@ def create_app(conf=LocalDevelopmentConfig):
 
 app,api,celery = create_app()
 
-client = SearchClient.create("RRBO0FF8YF", LocalDevelopmentConfig.SEARCH_API_KEY)
-index = client.init_index('sociogrammers_app')
+client = SearchClient.create("K26CF5W1OF", LocalDevelopmentConfig.SEARCH_API_KEY)
+index = client.init_index('seproject')
