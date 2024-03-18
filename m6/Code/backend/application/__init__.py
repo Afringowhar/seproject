@@ -47,3 +47,5 @@ app,api,celery = create_app()
 
 client = SearchClient.create("K26CF5W1OF", LocalDevelopmentConfig.SEARCH_API_KEY)
 index = client.init_index('seproject')
+
+# export ALGOLIA_API_KEY="db82374734d1c6c6357fc188fc040927"
