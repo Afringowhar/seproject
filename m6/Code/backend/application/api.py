@@ -71,7 +71,7 @@ class TicketAPI(Resource):
             return jsonify({'message':'Ticket created successfully'})
         else:
             abort(403,message="You are not authorized to view this page")
-        
+
     @token_required
     def patch(user, self):
         if user.role_id==1:
@@ -134,13 +134,13 @@ class TicketAPI(Resource):
                     is_FAQ = args["is_FAQ"]
                     ticket.is_FAQ = is_FAQ
             except:
-                pass 
+                pass
             try:
                 rating =  args["rating"]
                 ticket.rating = rating
                 #print("I am here!")
             except:
-                pass  
+                pass
             db.session.commit()
             tk_obj = {
                 'objectID': ticket.ticket_id,
@@ -158,7 +158,7 @@ class TicketAPI(Resource):
             }
             index.partial_update_object(obj=tk_obj)
             return jsonify({"message": "Ticket updated successfully"})
-        
+
         else:
             abort(403,message= "You are not authorized to access this!")
 
@@ -171,7 +171,7 @@ class TicketDelete(Resource):
             if responses:
                 for post in responses:
                     db.session.delete(post)
-                    db.session.commit() 
+                    db.session.commit()
             db.session.delete(current_ticket)
             db.session.commit()
             index.delete_object(current_ticket.ticket_id)
@@ -179,8 +179,8 @@ class TicketDelete(Resource):
         else:
             abort(400, message='No such ticket_id exists for the user')
 
-import secrets,string    
-from random_username.generate import generate_username   
+import secrets,string
+from random_username.generate import generate_username
 
 class UserAPI(Resource):
     @token_required
@@ -211,7 +211,7 @@ class UserAPI(Resource):
             return jsonify({'message':'User created successfully'})
         else:
             abort(403,message="You are not authorized to view this page")
-            
+
     @token_required
     def patch(user,self):
         args=request.get_json(force=True)
@@ -246,7 +246,7 @@ class UserAPI(Resource):
             pass
         db.session.commit()
         return jsonify({'message':'User updated successfully'})
-    
+
 class UserDelete(Resource):
     @token_required
     def delete(user,self,user_id):
@@ -296,8 +296,8 @@ class FAQApi(Resource):
                 is_app = data['is_approved']
             except:
                 abort(400, message="is_approved is required and should be boolean")
-            
-            if is_app: 
+
+            if is_app:
                 try:
                     cat = data['category']
                 except:
@@ -313,19 +313,19 @@ class FAQApi(Resource):
 
             if not isinstance(is_app, bool):
                 abort(400, message="is_approved must be boolean")
-            
+
             if db.session.query(FAQ).filter(FAQ.ticket_id== tid).first():
                 abort(400, message="ticket already in FAQ")
 
             newFAQ = FAQ(ticket_id = tid, category=cat, is_approved=is_app)
             db.session.add(newFAQ)
-            db.session.commit()  
+            db.session.commit()
 
-            return jsonify({'message': "FAQ item added successfully"})               
+            return jsonify({'message': "FAQ item added successfully"})
 
         else:
             abort(403, message="Unauthorized")
-    
+
     @token_required
     def patch(user, self):
         if user.role_id==3:
@@ -334,11 +334,11 @@ class FAQApi(Resource):
                 tid = int(data['ticket_id'])
             except:
                 abort(400, message="ticket_id is required and should be integer")
-            
+
             if not db.session.query(Ticket).filter(Ticket.ticket_id==tid).first():
                     abort(400, message="ticket_id does not exist")
             current_ticket=db.session.query(FAQ).filter(FAQ.ticket_id==tid).first()
-            if not current_ticket: 
+            if not current_ticket:
                 abort(400, message="ticket_id is not in FAQ")
             cat = None
             try:
@@ -359,21 +359,21 @@ class FAQApi(Resource):
             except Exception as e:
                if isinstance(e, HTTPException):
                    raise e
-                 
+
             db.session.commit()
             return jsonify({'message': "FAQ item updated successfully"})
-                
+
         else:
             abort(403, message="Unauthorized")
-    
+
     @token_required
     def delete(user, self, ticket_id):
         if user.role_id==3:
             tid = ticket_id
-            
+
             if not db.session.query(Ticket).filter(Ticket.ticket_id==tid).first():
                 abort(400, message="ticket_id does not exist")
-            
+
             current_ticket=db.session.query(FAQ).filter(FAQ.ticket_id==tid).first()
             if current_ticket:
                 db.session.delete(current_ticket)
@@ -383,7 +383,7 @@ class FAQApi(Resource):
                 abort(400, message="ticket_id is not in FAQ")
         else:
             abort(403, message="Unauthorized")
-        
+
 class getResponseAPI_by_ticket(Resource):
      @token_required
      def post(user, self):
@@ -394,12 +394,12 @@ class getResponseAPI_by_ticket(Resource):
             ticket_id = int(args["ticket_id"])
         except:
             abort(403,message = "Please provide a ticket ID for which you need the responses.")
-        
+
         try:
             responses = Response.query.filter_by(ticket_id = ticket_id).all()
         except:
             abort(404, message= "There are no tickets by that ID.")
-        
+
         responses = list(responses)
         l = []
         for item in responses:
@@ -411,7 +411,7 @@ class getResponseAPI_by_ticket(Resource):
             d["response_timestamp"] = item.response_timestamp
             l.append(d)
         return jsonify({"data": l, "status": "success"})
-     
+
 class ResponseAPI_by_ticket(Resource):
     @token_required
     def post(user, self):
@@ -448,14 +448,14 @@ class ResponseAPI_by_ticket(Resource):
             else:
                 abort(404, message =
                        "This ticket doesn't exist.")
-            
+
 
         else:
             abort(404, message = "You are not authorized to post responses to a ticket.")
 
     @token_required
     def patch(user, self):
-        #Allows only to change the response 
+        #Allows only to change the response
         #All other operations, like changing the ticket id, etc is not allowed.
 
         if user.role_id == 1 or user.role_id == 2:
@@ -526,7 +526,7 @@ class ResponseAPI_by_responseID_delete(Resource):
 class ResponseAPI_by_user(Resource):
     @token_required
     def post(user, self):
-        if user.role_id == 4: #Only managers can do this. 
+        if user.role_id == 4: #Only managers can do this.
             responses = None
             responder_id = None
             args = request.get_json(force = True)
@@ -534,12 +534,12 @@ class ResponseAPI_by_user(Resource):
                 responder_id= int(args["responder_id"])
             except:
                 abort(403,message = "Please provide a responder ID for which you need the responses.")
-            
+
             try:
                 responses = Response.query.filter_by(responder_id = responder_id).all()
             except:
                 abort(404, message= "There are no responses by that particular responder ID.")
-            
+
             responses = list(responses)
             l = []
             for item in responses:
@@ -564,7 +564,7 @@ class ResponseAPI_by_response_id(Resource): #This class can be used if required.
             response_id = int(args["response_id"])
         except:
             abort(403,message = "Please provide a response ID.")
-        
+
         try:
             responses = Response.query.filter_by(response_id = response_id).first()
         except:
@@ -603,7 +603,7 @@ class TicketAll(Resource):
             return jsonify({"data":result,"status":"success"})
         except:
             abort(404,message="No tickets found")
-    
+
     @token_required
     def patch(user, self):
             args = request.get_json(force = True)
@@ -667,7 +667,7 @@ class TicketAll(Resource):
                     is_FAQ = args["is_FAQ"]
                     ticket.is_FAQ = is_FAQ
             except:
-                pass   
+                pass
             rating = None
             try:
                 rating =  args["rating"]
@@ -694,7 +694,7 @@ class getResolutionTimes(Resource):
             except:
                 abort(403, message = "Please enter the ticket ID.")
             if isinstance(ticket_id, list):
-                data = []        
+                data = []
                 for item in ticket_id:
                     d = {}
                     ticket = None
@@ -823,7 +823,7 @@ class flaggedPostAPI(Resource):
                 return jsonify({"data": l, "status" : "success"})
         else:
             abort(404, message = "You are not authorized to access this feature.")
-    
+
     @token_required
     #Only support agents can add a new post as a flagged post
     #Will be triggered from the frontend when the support agent presses the button for a post to be offensive.
@@ -840,8 +840,8 @@ class flaggedPostAPI(Resource):
             try:
                 flagger_id = args["flagger_id"]
             except:
-                abort(403, message = "Please pass the flagger ID.") 
-            try:   
+                abort(403, message = "Please pass the flagger ID.")
+            try:
                 creator_id = args["creator_id"]
             except:
                 abort(403, message = "Please pass the creator ID.")
@@ -855,14 +855,14 @@ class flaggedPostAPI(Resource):
                     raise invalidFlaggerException
             except invalidFlaggerException:
                 abort(403, message = "The person who flagged must be a support agent.")
-            
+
             try:
                 creator = User.query.filter_by(user_id = creator_id, role_id = 1).first()
                 if creator is None:
                     raise invalidCreatorException
             except invalidCreatorException:
                 abort(403, message = "The person who created the post must be a student.")
-            
+
             try:
                 ticket = Ticket.query.filter_by(ticket_id = ticket_id, creator_id = creator_id).first()
                 if ticket is None:
@@ -875,7 +875,7 @@ class flaggedPostAPI(Resource):
             return jsonify({"status": "success"})
         else:
             abort(404, message = "You are not authorized to access this feature.")
-    
+
     @token_required
     def patch(user, self):
         if user.role_id == 3:
@@ -898,10 +898,10 @@ class flaggedPostAPI(Resource):
                 flagged_post.is_rejected = is_rejected
             db.session.commit()
             return jsonify({"status": "success"})
-            
+
         else:
             abort(404, message = "You are not authorized to access this feature.")
-            
+
 class Login(Resource):
     def post(self):
         if request.is_json:
@@ -924,8 +924,8 @@ class Login(Resource):
             return jsonify({"message":"Login Succeeded!", "token":token,"user_id":test.user_id,"role":test.role_id})
         else:
             abort(401, message="Bad Email or Password")
-            
-from application.utils import add_users_import    
+
+from application.utils import add_users_import
 class ImportResourceUser(Resource):
     @token_required
     def post(user,self):
@@ -943,7 +943,7 @@ class CategoryAPI(Resource):
     def get(user, self):
         categories = [cat.category for cat in db.session.query(Category).all()]
         return jsonify({'data': categories})
-    
+
     @token_required
     def post(user ,self):
         if user.role_id==3:
@@ -955,7 +955,7 @@ class CategoryAPI(Resource):
             db.session.add(new_cat)
             db.session.commit()
             return jsonify({"status": "success"})
-        else: 
+        else:
             abort(403,message="Unauthorized")
 
 
@@ -967,5 +967,19 @@ class Try(Resource):
             print("Success")
         else:
             print("Failed")
-            
+
         return jsonify({"message":"Hello"})
+
+# class Post(Resource):
+#     def get(self):
+#         url = "http://localhost:4200/posts.json"
+#         params = {"title": "Just a random title", "raw": "Random description for the new post", "category": 5}
+#         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+#                     "Api-Username" : "21f1002269",
+#                     "Content-Type" : "application/json"}
+#         # Make a get request with the parameters.
+#         response = requests.post(url, params=params, headers=headers)
+
+        # Print the content of the response
+        #print(response.content)
+        #req = request.post()
