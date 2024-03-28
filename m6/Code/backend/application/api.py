@@ -2,6 +2,7 @@ from flask_restful import Resource, request, abort
 from flask import jsonify
 from datetime import datetime
 from dateutil import tz, parser
+import requests
 from application.models import User, Response, Ticket, FAQ, Category, Flagged_Post
 from application.models import token_required, db
 from application.workers import celery
@@ -956,3 +957,15 @@ class CategoryAPI(Resource):
             return jsonify({"status": "success"})
         else: 
             abort(403,message="Unauthorized")
+
+
+
+class Try(Resource):
+    def get(self):
+        res = requests.get("http://localhost:4200/categories.json")
+        if res.status_code == 200:
+            print("Success")
+        else:
+            print("Failed")
+            
+        return jsonify({"message":"Hello"})
