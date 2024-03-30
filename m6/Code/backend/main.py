@@ -1,6 +1,6 @@
 from application import app, api, celery
 
-from application.api import Try, TicketAPI , UserAPI, FAQApi, ResponseAPI_by_ticket, ResponseAPI_by_response_id, ResponseAPI_by_user,TicketAll, getResolutionTimes, flaggedPostAPI, getResponseAPI_by_ticket,Login,ImportResourceUser, ResponseAPI_by_responseID_delete, CategoryAPI
+from application.api import Try, TicketAPI , UserAPI, FAQApi, ResponseAPI_by_ticket, ResponseAPI_by_response_id, ResponseAPI_by_user,TicketAll, getResolutionTimes, flaggedPostAPI, getResponseAPI_by_ticket,Login,ImportResourceUser, ResponseAPI_by_responseID_delete, CategoryAPI, Thread
 # from application.api import Post
 from application.api import TicketDelete,UserDelete
 api.add_resource(TicketAPI, '/api/ticket')
@@ -19,6 +19,7 @@ api.add_resource(TicketDelete,'/api/ticket/<int:ticket_id>')
 api.add_resource(UserDelete,'/api/user/<int:user_id>')
 api.add_resource(ResponseAPI_by_responseID_delete, '/api/respRespDel/<int:responder_id>/<int:response_id>')
 api.add_resource(CategoryAPI, '/api/category')
+api.add_resource(Thread, '/api/thread')
 # api.add_resource(Post, '/api/post')
 api.add_resource(Try, '/try')
 from application.routes import *

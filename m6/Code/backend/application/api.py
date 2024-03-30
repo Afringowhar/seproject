@@ -1,4 +1,4 @@
-from flask_restful import Resource, request, abort
+from flask_restful import Resource, request, abort, fields, marshal_with
 from flask import jsonify
 from datetime import datetime
 from dateutil import tz, parser
@@ -13,6 +13,14 @@ import jwt
 from .config import Config
 from werkzeug.exceptions import HTTPException
 from application import index
+import json
+
+threads_json = {
+    "id" : fields.Integer,
+    "topic_title" : fields.String,
+    "raw" : fields.String,
+    "topic_id" : fields.Integer
+}
 
 
 class TicketAPI(Resource):
@@ -969,6 +977,44 @@ class Try(Resource):
             print("Failed")
 
         return jsonify({"message":"Hello"})
+
+def convert(content):
+    byte_str = content
+    dict_str = json.loads(byte_str.decode("utf-8"))
+    return dict_str
+
+class Thread(Resource):
+    @marshal_with(threads_json)
+    def get(self):
+        url = "http://localhost:4200/posts.json"
+        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+                    "Api-Username" : "21f1002269" }
+        response = requests.get(url, headers=headers)
+        dict_str = convert(response.content)
+        return dict_str["latest_posts"]
+
+    @marshal_with(threads_json)
+    def post(self):
+        url = "http://localhost:4200/posts.json"
+        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+                    "Api-Username" : "21f1002269",
+                    "Content-Type" : "application/json"}
+        params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": request.form.get("category")}
+        response = requests.post(url, params=params, headers=headers)
+        dict_str = convert(response.content)
+        return dict_str
+
+    def put(self):
+        url = "http://localhost:4200/posts/"+str(request.form.get("id"))+".json"
+        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+                    "Api-Username" : "21f1002269",
+                    "Content-Type" : "application/json"}
+        params = {"post": {"raw": request.form.get("description")}}
+        response = requests.put(url, json=params, headers=headers)
+        print(response.content)
+        # dict_str = convert(response)
+        # return dict_str
+        return None
 
 # class Post(Resource):
 #     def get(self):
