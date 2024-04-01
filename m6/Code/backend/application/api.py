@@ -986,18 +986,19 @@ def convert(content):
 class Thread(Resource):
     @marshal_with(threads_json)
     def get(self):
-        url = "http://localhost:4200/posts.json"
-        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+        url = "http://localhost:4200/latest.json"
+        headers = { "Api-Key" : "ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4",
                     "Api-Username" : "21f1002269" }
         response = requests.get(url, headers=headers)
         dict_str = convert(response.content)
-        return dict_str["latest_posts"]
+
+        return dict_str['topic_list']['topics']
 
     @marshal_with(threads_json)
     def post(self):
         url = "http://localhost:4200/posts.json"
         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
-                    "Api-Username" : "21f1002269",
+                    "Api-Username" : "afreen",
                     "Content-Type" : "application/json"}
         params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": request.form.get("category")}
         response = requests.post(url, params=params, headers=headers)
@@ -1015,6 +1016,13 @@ class Thread(Resource):
         # dict_str = convert(response)
         # return dict_str
         return None
+
+    def delete(self):
+        url = "http://localhost:4200/t/"+str(request.form.get("id"))+".json"
+        headers = { "Api-Key" : "ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4",
+                    "Api-Username" : "21f1002269"}
+        response = requests.delete(url, headers=headers)
+        print(response.content)
 
 # class Post(Resource):
 #     @marshal_with(threads_json)
@@ -1040,7 +1048,7 @@ class Thread(Resource):
 #         response = requests.post(url, params=params, headers=headers)
 #         dict_str = convert(response.content)
 #         return dict_str
-    
+
 #     def put(self):
 #         url = "http://localhost:4200/posts/"+str(request.form.get("id"))+".json"
 #         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a"
@@ -1049,5 +1057,3 @@ class Thread(Resource):
 #         params = {"post": {"raw": request.form.get("description")}}
 #         response = requests.put(url, json=params, headers=headers)
 #         print(response.content)
-
-
