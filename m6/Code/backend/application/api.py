@@ -1016,38 +1016,38 @@ class Thread(Resource):
         # return dict_str
         return None
 
-# class Post(Resource):
-#     @marshal_with(threads_json)
-#     def get(self):
-#         url = "http://localhost:4200/posts.json"
-#         params = {"title": "Just a random title", "raw": "Random description for the new post", "category": 5}
-#         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
-#                     "Api-Username" : "21f1002269",
-#                     "Content-Type" : "application/json"}
-#         # Make a get request with the parameters.
-#         response = requests.post(url, params=params, headers=headers)
-#         print(response.content)
-#         req = request.post()
+class Post(Resource):
+    @marshal_with(threads_json)
+    def get(self):
+        url = "http://localhost:4200/posts.json"
+        params = {"title": "Just a random title", "raw": "Random description for the new post", "category": 5}
+        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+                    "Api-Username" : "21f1002269",
+                    "Content-Type" : "application/json"}
+        # Make a get request with the parameters.
+        response = requests.post(url, params=params, headers=headers)
+        print(response.content)
+        req = request.post()
 
 
-#     @marshal_with(threads_json)
-#     def post(self):
-#         url = "http://localhost:4200/posts.json"
-#         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
-#                    "Api-Username" : "21f2000280",
-#                    "Content-Type" : "application/json"}
-#         params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": request.form.get("category")}
-#         response = requests.post(url, params=params, headers=headers)
-#         dict_str = convert(response.content)
-#         return dict_str
+    @marshal_with(threads_json)
+    def post(self):
+        url = "http://localhost:4200/posts.json"
+        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+                   "Api-Username" : "21f2000280",
+                   "Content-Type" : "application/json"}
+        params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": request.form.get("category")}
+        response = requests.post(url, params=params, headers=headers)
+        dict_str = convert(response.content)
+        return dict_str
     
-#     def put(self):
-#         url = "http://localhost:4200/posts/"+str(request.form.get("id"))+".json"
-#         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a"
-#                    ,"Api-Username" : "21f1002269",
-#                    "Content-Type" : "application/json"}
-#         params = {"post": {"raw": request.form.get("description")}}
-#         response = requests.put(url, json=params, headers=headers)
-#         print(response.content)
+    def put(self):
+        url = "http://localhost:4200/posts/"+str(request.form.get("id"))+".json"
+        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a"
+                   ,"Api-Username" : "21f1002269",
+                   "Content-Type" : "application/json"}
+        params = {"post": {"raw": request.form.get("description")}}
+        response = requests.put(url, json=params, headers=headers)
+        print(response.content)
 
 
