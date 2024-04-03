@@ -2,7 +2,7 @@
 # # # GET: Check Status Code and Key-Value Pairs
 # # # POST/PATCH: Check Status Code, GET Request and Check Key-Value Pairs
 # # # DELETE: Delete Request, Get Status Code, GET Request and raise Error/not 200 status code
-import pytest
+
 from application.tasks import send_email, response_notification, unanswered_ticket_notification
 from application.tasks import celery
 from celery import chain
