@@ -21,9 +21,7 @@ threads_json = {
 }
 posts_json = {
     "id" : fields.Integer,
-    "topic_title" : fields.String,
-    "raw" : fields.String,
-    "topic_id" : fields.Integer
+    "cooked" : fields.String
 }
 
 
@@ -1026,6 +1024,23 @@ class Thread(Resource):
         headers = { "Api-Key" : "ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4",
                     "Api-Username" : "21f1002269"}
         response = requests.delete(url, headers=headers)
+
+class Reply(Resource):
+    @marshal_with(posts_json)
+    def get(self):
+        url = "http://localhost:4200/t/blah/"+str(request.form.get("id"))+".json"
+        headers = { "Api-Key" : "ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4",
+                    "Api-Username" : "21f1002269"}
+        response = convert(requests.get(url, headers=headers).content)
+        return response['post_stream']['posts']
+    def post(self):
+        url = "http://localhost:4200/posts.json"
+        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+                    "Api-Username" : "afreen",
+                    "Content-Type" : "application/json"}
+        params = {"title": request.form.get("title"), "raw": request.form.get("description"), "topic_id": request.form.get("id")}
+        response = convert(requests.post(url, params=params, headers=headers).content)
+        return response
 
 # class Post(Resource):
 #     @marshal_with(threads_json)
