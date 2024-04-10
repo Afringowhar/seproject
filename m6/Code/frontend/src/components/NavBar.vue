@@ -16,6 +16,9 @@
                     <li class="nav-item">
                         <router-link to="/faq" class="nav-link active" aria-current="page">FAQ</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link to="/thread" class="nav-link active" aria-current="page">Thread</router-link>
+                    </li>
                 </ul>
                 <form class="d-flex" role="search" v-if="user_id">
                     <button class="btn btn-outline-danger" type="submit" @click="logout">Logout</button>

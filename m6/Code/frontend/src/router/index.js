@@ -14,6 +14,7 @@ import ManageUsersComponent from '../components/ManageUsersComponent.vue';
 import ManageFAQSuggestionsComponent from '../components/ManageFAQComponent.vue';
 import ManageFlaggedPosts from '../components/ManageFlaggedPosts.vue';
 import AddAdminsComponent from '../components/AddAdmins.vue';
+import threadComponent from '../components/threadComponent.vue';
 // import store from "../store";
 const routes = [
     {
@@ -72,6 +73,11 @@ const routes = [
         path: "/addAdmins",
         component: AddAdminsComponent,
         name: "AddAdmins"
+    },
+    {
+        path: "/thread",
+        component: threadComponent,
+        name: "thread"
     }
 ];
 const router = createRouter({
