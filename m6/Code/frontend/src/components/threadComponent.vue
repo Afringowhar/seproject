@@ -7,7 +7,7 @@
           <tr>
             <th>Title</th>
             <th>Category</th>
-            <th>Created By</th>
+            <th>Created By:</th>
             <th>Replies</th>
           </tr>
         </thead>
