@@ -1,27 +1,19 @@
 <!-- ThreadComponent.vue -->
 <template>
-    <div>
-      <h1>Threads</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Created By:</th>
-            <th>Replies</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="thread in threads" :key="thread.id">
-            <td><a :href="`/thread/${thread.id}`">{{ thread }}</a></td>
-            <td>{{ thread.category }}</td>
-            <td>{{ thread.created_by }}</td>
-            <td>{{ thread.replies }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <h1 id="title">Threads</h1>
+  <div class="container">
+    <div class="thread-container">
+      <div v-for="thread in threads" :key="thread.id" class="thread-info">
+        <h2>{{ thread.title }}</h2>
+        <p>Created by: {{ thread.created_by }}</p>
+        <p>Created at: {{ thread.created_at }}</p>
+        <p>Reply count: {{ thread.reply_count }}</p>
+        <button @click="toggleLike(thread)">Like</button>
+        <button @click="toggleBookmark(thread)">Bookmark</button>
+      </div>
     </div>
-  </template>
+  </div>
+</template>
   
   
   <script>
@@ -37,20 +29,51 @@
       this.fetchThreads();
     },
     methods: {
-      async fetchThreads() {
-        try {
-          const response = await axios.get('http://localhost:4200/latest.json', {
-            headers: {
-              'Api-Key': 'ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4',
-              'Api-Username': '21f1002269'
-            }
-          });
-          this.threads = response.data.topic_list.topics;
-        } catch (error) {
-          console.error('Error fetching threads:', error);
-        }
+    async fetchThreads() {
+      try {
+        //const response = await axios.get('/api/thread');
+        //Below api is just for trial
+        const response = await axios.get('https://mocki.io/v1/6d525fbd-2885-445d-8700-b6f4075fd3e6');
+        this.threads = response.data;
+      } catch (error) {
+        console.error('Error fetching threads:', error);
       }
+    },
+    toggleLike(item) {
+      // Implement like functionality
+      console.log('Like clicked for:', item);
+    },
+    toggleBookmark(item) {
+      // Implement bookmark functionality
+      console.log('Bookmark clicked for:', item);
     }
+  }
   };
   </script>
+
+<style scoped>
+
+#title{
+  text-align: center;
+}
+.container {
+  margin: 20px;
+}
+
+.thread-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.thread-info {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.replies {
+  margin-left: 20px;
+}
+
+</style>
   
