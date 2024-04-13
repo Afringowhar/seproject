@@ -993,7 +993,6 @@ class Thread(Resource):
                     "Api-Username" : "21f1002269" }
         response = requests.get(url, headers=headers)
         dict_str = convert(response.content)
-
         return dict_str['topic_list']['topics']
 
     @marshal_with(threads_json)
