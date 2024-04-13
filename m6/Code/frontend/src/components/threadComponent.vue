@@ -15,7 +15,7 @@
     <div class="thread-container">
       <div v-for="thread in threads" :key="thread.id" class="thread-info">
         <h2>{{ thread.title }}</h2>
-        <p>Created by: {{ thread.created_by }}</p>
+        <p>Created by:: {{ thread.created_by }}</p>
         <p>Created at: {{ thread.created_at }}</p>
         <p>Reply count: {{ thread.reply_count }}</p>
         <button @click="toggleLike(thread)">Like</button>
