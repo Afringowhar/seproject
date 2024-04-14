@@ -1,5 +1,5 @@
 <template>
-  
+
   <h1 id="title">Threads</h1>
   <!--Add thread -->
   <div class="container">
@@ -10,7 +10,7 @@
         <span class="close" @click="toggleCreateThread">&times;</span>
         <h2>Create Thread</h2><br>
       <p><input type="text" v-model="newThread.title" placeholder="Enter thread title"></p>
-      <p><input type="text" v-model="newThread.created_by" placeholder="Enter user ID"></p>
+      <p><input type="text" v-model="newThread.description" placeholder="Description of the thread"></p>
       <div class="ctbutton"><button @click="createThread">Create Thread</button></div>
     </div>
     </div>
@@ -31,18 +31,18 @@
     </div>
   </div>
   </template>
-  
-  
+
+
   <script>
   import axios from 'axios';
-  
+
   export default {
     data() {
       return {
         threads: [],
         newThread: {
         title: '',
-        created_by: ''
+        description: ''
       },
       showCreateThread: false
       };
@@ -56,9 +56,9 @@
       },
     async fetchThreads() {
       try {
-        //const response = await axios.get('/api/thread');
+        const response = await axios.get('/api/thread');
         //Below api is just for trial
-        const response = await axios.get('https://mocki.io/v1/6d525fbd-2885-445d-8700-b6f4075fd3e6');
+        // const response = await axios.get('https://mocki.io/v1/6d525fbd-2885-445d-8700-b6f4075fd3e6');
         this.threads = response.data;
       } catch (error) {
         console.error('Error fetching threads:', error);
@@ -66,11 +66,18 @@
     },
     async createThread() {
       try {
-        const response = await axios.post('/api/thread', this.newThread);
+        var form = new FormData();
+        form.append("title", this.newThread.title);
+        form.append("description", this.newThread.description);
+        // const response = await axios.post('http://127.0.0.1:5000/api/thread', data_table, {headers: {'Content-Type': 'application/json'}});
+        const response = await fetch("http://127.0.0.1:5000/api/thread", {
+          method: 'POST',
+          body: form
+        })
         console.log('New thread created:', response.data);
         // Clear input fields after successful creation
         this.newThread.title = '';
-        this.newThread.created_by = '';
+        this.newThread.description = '';
         // Fetch threads again to update the list
         await this.fetchThreads();
       } catch (error) {
@@ -110,7 +117,7 @@
   transition: background-color 0.3s;
 }
 .addthread button:hover {
-  background-color: #0f3863; 
+  background-color: #0f3863;
   color: cyan;
 }
 .create-thread {
@@ -167,7 +174,7 @@
   transition: background-color 0.3s;
 }
 .ctbutton button:hover {
-  background-color: #0f3863; 
+  background-color: #0f3863;
   color: cyan;
 }
 .actions {
@@ -184,7 +191,7 @@
   transition: background-color 0.3s;
 }
 .like button:hover {
-  background-color: #e30821; 
+  background-color: #e30821;
   color: white;
 }
 .bookmark button {
@@ -198,7 +205,7 @@
   transition: background-color 0.3s;
 }
 .bookmark button:hover {
-  background-color: yellow; 
+  background-color: yellow;
   color: white;
 }
 .replies {

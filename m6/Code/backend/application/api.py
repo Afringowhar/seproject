@@ -14,10 +14,14 @@ from .config import Config
 from werkzeug.exceptions import HTTPException
 from application import index
 import json
+from env.api import ADMIN_API, GLOBAL_API
 
 threads_json = {
     "id" : fields.Integer,
-    "title" : fields.String
+    "title" : fields.String,
+    "created_by" : fields.String,
+    "created_at" : fields.String,
+    "reply_count" : fields.Integer
 }
 posts_json = {
     "id" : fields.Integer,
@@ -989,7 +993,7 @@ class Thread(Resource):
     @marshal_with(threads_json)
     def get(self):
         url = "http://localhost:4200/latest.json"
-        headers = { "Api-Key" : "ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4",
+        headers = { "Api-Key" : ADMIN_API,
                     "Api-Username" : "21f1002269" }
         response = requests.get(url, headers=headers)
         dict_str = convert(response.content)
@@ -998,13 +1002,17 @@ class Thread(Resource):
     @marshal_with(threads_json)
     def post(self):
         url = "http://localhost:4200/posts.json"
-        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
-                    "Api-Username" : "afreen",
+        headers = { "Api-Key" : GLOBAL_API,
+                    "Api-Username" : "21f1002269",
                     "Content-Type" : "application/json"}
-        params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": request.form.get("category")}
+        params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": "4"}
+        # print(request.form.get("title"))
+        # print(request.form.get("description"))
+        # params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": request.form.get("category")}
         response = requests.post(url, params=params, headers=headers)
         dict_str = convert(response.content)
-        return dict_str
+        # print(dict_str)
+        return None
 
     def put(self):
         url = "http://localhost:4200/posts/"+str(request.form.get("id"))+".json"
