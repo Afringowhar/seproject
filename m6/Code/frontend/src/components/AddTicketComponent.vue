@@ -5,7 +5,7 @@
         <h1 class="text-center">Add Ticket</h1>
         <form @submit.prevent="addCard">
           <div class="form-group">
-            <label>Title </label>
+            <label>Title</label>
             <i
               class="bi bi-patch-question-fill"
               data-toggle="tooltip"
