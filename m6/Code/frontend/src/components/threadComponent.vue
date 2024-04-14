@@ -3,11 +3,16 @@
   <h1 id="title">Threads</h1>
   <!--Add thread -->
   <div class="container">
-    <button @click="showCreateThread = !showCreateThread">Add Thread</button>
+    <div class="addthread"><button @click="showCreateThread = !showCreateThread">Add Thread</button> </div>
+    <br>
     <div v-if="showCreateThread" class="create-thread">
-      <input type="text" v-model="newThread.title" placeholder="Enter thread title">
-      <input type="text" v-model="newThread.created_by" placeholder="Enter user ID">
-      <button @click="createThread">Create Thread</button>
+      <div class="popup-content">
+        <span class="close" @click="toggleCreateThread">&times;</span>
+        <h2>Create Thread</h2><br>
+      <p><input type="text" v-model="newThread.title" placeholder="Enter thread title"></p>
+      <p><input type="text" v-model="newThread.created_by" placeholder="Enter user ID"></p>
+      <div class="ctbutton"><button @click="createThread">Create Thread</button></div>
+    </div>
     </div>
     </div>
   <!--View Thread -->
@@ -15,11 +20,13 @@
     <div class="thread-container">
       <div v-for="thread in threads" :key="thread.id" class="thread-info">
         <h2>{{ thread.title }}</h2>
-        <p>Created by:: {{ thread.created_by }}</p>
+        <p>Created by: {{ thread.created_by }}</p>
         <p>Created at: {{ thread.created_at }}</p>
         <p>Reply count: {{ thread.reply_count }}</p>
-        <button @click="toggleLike(thread)">Like</button>
-        <button @click="toggleBookmark(thread)">Bookmark</button>
+        <div class="actions">
+        <div class="like"><button @click="toggleLike(thread)"></button></div>
+        <div class="bookmark"><button @click="toggleBookmark(thread)">⛊</button></div>
+      </div>
       </div>
     </div>
   </div>
@@ -44,6 +51,9 @@
       this.fetchThreads();
     },
     methods: {
+      toggleCreateThread() {
+        this.showCreateThread = !this.showCreateThread;
+      },
     async fetchThreads() {
       try {
         //const response = await axios.get('/api/thread');
@@ -87,18 +97,110 @@
 .container {
   margin: 20px;
 }
-
+.addthread {
+  text-align: right;
+}
+.addthread button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.addthread button:hover {
+  background-color: #0f3863; 
+  color: cyan;
+}
+.create-thread {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height:100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .thread-container {
   display: flex;
   flex-direction: column;
 }
-
+.popup-content {
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 81, 255, 0.367);
+  position: relative;
+  max-width: 500px;
+  width: 90%;
+}
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+}
+.create-thread input[type="text"] {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 .thread-info {
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
-
+.ctbutton button{
+  padding: 10px 20px;
+  background-color: #08e393;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.ctbutton button:hover {
+  background-color: #0f3863; 
+  color: cyan;
+}
+.actions {
+  display: flex;
+}
+.like button {
+  padding: 4px 12px;
+  background-color: white;
+  font-size: 30px;
+  color: #e30821;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.like button:hover {
+  background-color: #e30821; 
+  color: white;
+}
+.bookmark button {
+  padding: 4px 10px;
+  background-color: white;
+  font-size: 30px;
+  color: yellow;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.bookmark button:hover {
+  background-color: yellow; 
+  color: white;
+}
 .replies {
   margin-left: 20px;
 }
