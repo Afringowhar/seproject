@@ -1034,9 +1034,10 @@ class Thread(Resource):
 
     def delete(self):
         url = "http://localhost:4200/t/"+str(request.args.get("id"))+".json"
-        headers = { "Api-Key" : "ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4",
+        headers = { "Api-Key" : GLOBAL_API,
                     "Api-Username" : "21f1002269"}
         response = requests.delete(url, headers=headers)
+        return None
 
 class Reply(Resource):
     @marshal_with(posts_json)
