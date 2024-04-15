@@ -20,7 +20,7 @@
       <h3>Edit Thread</h3>
       <input type="text" v-model="updatedThread.id" placeholder="Enter updated id">
       <input type="text" v-model="updatedThread.description" placeholder="Enter updated description">
-      <button @click="updateThread">Update Thread</button>
+      <button @click="editThread">Update Thread</button>
     </div>
   <!--View Thread -->
   <div class="container">
@@ -109,9 +109,11 @@
     async editThread() {
       try {
         var form = new FormData();
-        form.append("id", this.updatedThread.id);
+        form.append("id", this.threadIdToUpdate);
         form.append("description", this.updatedThread.description);
-        const response = await fetch(`http://127.0.0.1:5000/api/thread`, {
+        console.log(this.threadIdToUpdate);
+        console.log(this.updatedThread.description);
+        const response = await fetch('http://127.0.0.1:5000/api/thread', {
           method: 'PUT',
           body: form
         });
