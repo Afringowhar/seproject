@@ -1033,7 +1033,7 @@ class Thread(Resource):
         return None
 
     def delete(self):
-        url = "http://localhost:4200/t/"+str(request.form.get("id"))+".json"
+        url = "http://localhost:4200/t/"+str(request.args.get("id"))+".json"
         headers = { "Api-Key" : "ce4fe486cb5eb2d38ea811d358e8e82978f8944f5cf06daa30f77523ea70dbc4",
                     "Api-Username" : "21f1002269"}
         response = requests.delete(url, headers=headers)
