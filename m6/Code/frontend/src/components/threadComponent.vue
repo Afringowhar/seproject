@@ -109,9 +109,9 @@
     async editThread() {
       try {
         var form = new FormData();
-        form.append("title", this.updatedThread.id);
+        form.append("id", this.updatedThread.id);
         form.append("description", this.updatedThread.description);
-        const response = await fetch(`http://127.0.0.1:5000/api/thread/${this.threadIdToUpdate}`, {
+        const response = await fetch(`http://127.0.0.1:5000/api/thread`, {
           method: 'PUT',
           body: form
         });
