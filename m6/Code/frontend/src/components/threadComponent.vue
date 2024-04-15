@@ -15,6 +15,13 @@
     </div>
     </div>
     </div>
+    <!--Edit thread -->
+    <div class="edit-thread" v-if="showEditForm">
+      <h3>Edit Thread</h3>
+      <input type="text" v-model="updatedThread.id" placeholder="Enter updated id">
+      <input type="text" v-model="updatedThread.description" placeholder="Enter updated description">
+      <button @click="updateThread">Update Thread</button>
+    </div>
   <!--View Thread -->
   <div class="container">
     <div class="thread-container">
@@ -26,6 +33,7 @@
         <div class="actions">
         <div class="like"><button @click="toggleLike(thread)"></button></div>
         <div class="bookmark"><button @click="toggleBookmark(thread)">⛊</button></div>
+        <button @click="showEditForm = true; setThreadToUpdate(thread)">Edit</button>
       </div>
       </div>
     </div>
@@ -44,7 +52,13 @@
         title: '',
         description: ''
       },
-      showCreateThread: false
+      updatedThread: {
+        id: '',
+        description: ''
+      },
+      showCreateThread: false,
+      showEditForm: false,
+      threadIdToUpdate: null
       };
     },
     mounted() {
@@ -58,7 +72,7 @@
       try {
         const response = await axios.get('/api/thread');
         //Below api is just for trial
-        // const response = await axios.get('https://mocki.io/v1/6d525fbd-2885-445d-8700-b6f4075fd3e6');
+        // const response = await axios.get('https://mocki.io/v1/e0ef012b-6bcb-4828-9f54-a2c68ba5a159');
         this.threads = response.data;
       } catch (error) {
         console.error('Error fetching threads:', error);
@@ -91,7 +105,27 @@
     toggleBookmark(item) {
       // Implement bookmark functionality
       console.log('Bookmark clicked for:', item);
-    }
+    },
+    async editThread() {
+      try {
+        var form = new FormData();
+        form.append("title", this.updatedThread.id);
+        form.append("description", this.updatedThread.description);
+        const response = await fetch(`http://127.0.0.1:5000/api/thread/${this.threadIdToUpdate}`, {
+          method: 'PUT',
+          body: form
+        });
+        console.log('Thread updated:', response.data);
+        this.updatedThread.id = '';
+        this.updatedThread.description = '';
+        await this.fetchThreads();
+      } catch (error) {
+        console.error('Error updating thread:', error);
+      }
+    },
+    setThreadToUpdate(thread) {
+      this.threadIdToUpdate = thread.id;
+    },
   }
   };
   </script>
