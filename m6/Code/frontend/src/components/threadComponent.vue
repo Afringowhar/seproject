@@ -34,6 +34,7 @@
         <div class="like"><button @click="toggleLike(thread)"></button></div>
         <div class="bookmark"><button @click="toggleBookmark(thread)">⛊</button></div>
         <button @click="showEditForm = true; setThreadToUpdate(thread)">Edit</button>
+        <button @click="deleteThread(thread.id)">Delete</button>
       </div>
       </div>
     </div>
@@ -125,6 +126,15 @@
     },
     setThreadToUpdate(thread) {
       this.threadIdToUpdate = thread.id;
+    },
+    async deleteThread(threadId) {
+      try {
+        const response = await axios.delete(`/api/thread?id=${threadId}`);
+        console.log('Thread deleted:', response.data);
+        await this.fetchThreads(); // Fetch threads again to update the list
+      } catch (error) {
+        console.error('Error deleting thread:', error);
+      }
     },
   }
   };
