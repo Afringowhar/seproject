@@ -21,7 +21,7 @@ threads_json = {
     "title" : fields.String,
     "created_by" : fields.String,
     "created_at" : fields.String,
-    "reply_count" : fields.Integer
+    "reply_count" : fields.Integer,
 }
 posts_json = {
     "id" : fields.Integer,
@@ -1015,13 +1015,19 @@ class Thread(Resource):
         return None
 
     def put(self):
-        url = "http://localhost:4200/posts/"+str(request.form.get("id"))+".json"
-        headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
+        url = "http://localhost:4200/t/"+str(request.form.get("id"))+".json"
+        headers = { "Api-Key" : GLOBAL_API,
+                    "Api-Username" : "21f1002269"}
+        response = requests.get(url, headers=headers)
+        dict_str = convert(response.content)
+        post_id = dict_str['post_stream']['posts'][0]['id']
+        url = "http://localhost:4200/posts/"+str(post_id)+".json"
+        headers = { "Api-Key" : GLOBAL_API,
                     "Api-Username" : "21f1002269",
                     "Content-Type" : "application/json"}
         params = {"post": {"raw": request.form.get("description")}}
         response = requests.put(url, json=params, headers=headers)
-        print(response.content)
+        # print(response.content)
         # dict_str = convert(response)
         # return dict_str
         return None
