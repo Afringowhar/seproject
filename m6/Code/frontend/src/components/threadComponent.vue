@@ -100,13 +100,25 @@
         console.error('Error creating thread:', error);
       }
     },
-    toggleLike(item) {
+    async toggleLike(item) {
       // Implement like functionality
-      console.log('Like clicked for:', item);
+      console.log('Like clicked for:', item.id);
+      var form = new FormData();
+      form.append("id", item.id);
+      await fetch("http://127.0.0.1:5000/api/like", {
+        method: 'POST',
+        body: form
+      });
     },
-    toggleBookmark(item) {
+    async toggleBookmark(item) {
       // Implement bookmark functionality
       console.log('Bookmark clicked for:', item);
+      var form = new FormData();
+      form.append("id", item.id);
+      await fetch("http://127.0.0.1:5000/api/bookmark", {
+        method: 'POST',
+        body: form
+      });
     },
     async editThread() {
       try {
