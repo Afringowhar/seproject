@@ -21,6 +21,7 @@
       <input type="text" v-model="updatedThread.id" placeholder="Enter updated id">
       <input type="text" v-model="updatedThread.description" placeholder="Enter updated description">
       <button @click="editThread">Update Thread</button>
+      <button @click="cancelEdit">Cancel</button>
     </div>
   <!--View Thread -->
   <div class="container">
@@ -138,7 +139,10 @@
         console.error('Error deleting thread:', error);
       }
     },
+    cancelEdit() {
+      this.showEditForm = false;
   }
+}
   };
   </script>
 
