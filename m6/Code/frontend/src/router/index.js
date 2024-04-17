@@ -15,6 +15,8 @@ import ManageFAQSuggestionsComponent from '../components/ManageFAQComponent.vue'
 import ManageFlaggedPosts from '../components/ManageFlaggedPosts.vue';
 import AddAdminsComponent from '../components/AddAdmins.vue';
 import threadComponent from '../components/threadComponent.vue';
+import threadComponent_replies from '../components/threadReplies.vue';
+import likedThread from '../components/likedThread.vue';
 // import store from "../store";
 const routes = [
     {
@@ -78,7 +80,18 @@ const routes = [
         path: "/thread",
         component: threadComponent,
         name: "thread"
+    },
+    {
+        path: "/thread_replies",
+        component: threadComponent_replies,
+        name: "thread_replies"
+    },
+    {
+        path: "/likedThread",
+        component: likedThread,
+        name: "likedThread"
     }
+
 ];
 const router = createRouter({
     history: createWebHistory(),
