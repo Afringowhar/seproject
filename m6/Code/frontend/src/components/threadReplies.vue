@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <h1>Thread Replies</h1>
+      <div class="replytitle"><h1>Thread Replies</h1></div>
       <div class="replies-container">
         <!-- Displaying the thread description as the first reply -->
           <p v-html="replies[0].cooked"></p>
@@ -56,5 +56,8 @@
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
+  }
+  .replytitle {
+    text-align: center;
   }
   </style>
