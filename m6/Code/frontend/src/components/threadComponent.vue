@@ -88,7 +88,10 @@
         // const response = await axios.post('http://127.0.0.1:5000/api/thread', data_table, {headers: {'Content-Type': 'application/json'}});
         const response = await fetch("http://127.0.0.1:5000/api/thread", {
           method: 'POST',
-          body: form
+          body: form,
+          headers: {
+            'secret_authtoken' : localStorage.getItem("token")
+          }
         })
         console.log('New thread created:', response.data);
         // Clear input fields after successful creation
