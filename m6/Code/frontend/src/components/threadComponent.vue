@@ -11,19 +11,23 @@
         <span class="close" @click="toggleCreateThread">&times;</span>
         <h2>Create Thread</h2><br>
       <p><input type="text" v-model="newThread.title" placeholder="Enter thread title"></p>
-      <p><input type="text" v-model="newThread.description" placeholder="Description of the thread"></p>
+      <p><textarea v-model="newThread.description" placeholder="Description of the thread"></textarea></p>
       <div class="ctbutton"><button @click="createThread">Create Thread</button></div>
     </div>
     </div>
     </div>
     <!--Edit thread -->
     <div class="edit-thread" v-if="showEditForm">
-      <h3>Edit Thread</h3>
-      <input type="text" v-model="updatedThread.id" placeholder="Enter updated id">
-      <input type="text" v-model="updatedThread.description" placeholder="Enter updated description">
-      <button @click="editThread">Update Thread</button>
-      <button @click="cancelEdit">Cancel</button>
+      <div class="edit-popup">
+        <span class="close" @click="cancelEdit">&times;</span>
+      <h3>Edit Thread</h3><br>
+      <p><input type="text" v-model="updatedThread.description" placeholder="Enter updated description" style="width: 450px; height: 300px;"></p>
+      <div class="editactions">
+      <div class="editbutton"><button @click="updateThread">Update Thread</button></div>
+      <div class="cancel"><button @click="cancelEdit">Cancel</button></div>
     </div>
+    </div></div>
+
   <!--View Thread -->
   <div class="container">
     <div class="thread-container">
@@ -32,17 +36,22 @@
         <p>Description: {{ thread.raw }}</p>
         <p>Created at: {{ thread.created_at }}</p>
         <p>Reply count: {{ thread.reply_count }}</p>
-        <router-link :to="`/thread_replies?id=${thread.id}`">View Replies</router-link>
+        <p class="replybutton"><router-link :to="`/thread_replies?id=${thread.id}`"><button>View Replies</button></router-link></p>
         <div class="actions">
-        <div class="like"><button @click="toggleLike(thread)"></button></div>
-        <div class="bookmark"><button @click="toggleBookmark(thread)">⛊</button></div>
-        <button @click="showEditForm = true; setThreadToUpdate(thread)">Edit</button>
-        <button @click="deleteThread(thread.id)">Delete</button>
+          <div class="actionsleft">
+        <p class="like"><button @click="toggleLike(thread)" :class="{ liked: thread.liked }"></button></p>
+        <p class="bookmark"><button @click="toggleBookmark(thread)" :class="{ bookmarked: thread.bookmarked }">⛊</button></p>
+      </div>
+        <div class="actionsright">
+        <p class="edit"><button @click="showEditForm = true; setThreadToUpdate(thread)"></button></p>
+        <p class="delete"><button @click="deleteThread(thread.id)"></button></p>
+      </div>
       </div>
       </div>
     </div>
   </div>
   </template>
+
 
 
   <script>
@@ -88,7 +97,7 @@
         form.append("title", this.newThread.title);
         form.append("description", this.newThread.description);
         // const response = await axios.post('http://127.0.0.1:5000/api/thread', data_table, {headers: {'Content-Type': 'application/json'}});
-        const response = await fetch("http://127.0.0.1:5000/api/thread", {
+        const response = await fetch('http://127.0.0.1:5000/api/thread', {
           method: 'POST',
           body: form,
           headers: {
@@ -203,7 +212,57 @@
   display: flex;
   flex-direction: column;
 }
+.edit-thread {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height:100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.editbutton button {
+  padding: 10px 20px;
+  margin-right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.editbutton button:hover {
+  background-color: #0f3863;
+  color: cyan;
+}
+.cancel button {
+  padding: 10px 20px;
+  margin-right: 20px;
+  background-color: #ff5500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.cancel button:hover {
+  background-color: #933404;
+  color: #fac5ab;
+}
 .popup-content {
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 81, 255, 0.367);
+  position: relative;
+  max-width: 500px;
+  width: 90%;
+}
+.edit-popup {
   text-align: center;
   background-color: white;
   padding: 20px;
@@ -246,28 +305,42 @@
 }
 .actions {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.actionsright {
+  display: flex;
+}
+.actionsleft {
+  display: flex;
+}
+.editactions {
+  justify-content: center;
+  display: flex;
 }
 .like button {
   padding: 4px 12px;
-  background-color: white;
+  text-align: center;
   font-size: 30px;
-  color: #e30821;
+  background-color: white;
+  color: pink;
   border: none;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 .like button:hover {
-  background-color: #e30821;
+  background-color: pink;
   color: white;
 }
 .bookmark button {
-  padding: 4px 10px;
-  background-color: white;
+  padding: 4px 12px;
   font-size: 30px;
+  text-align: center;
+  background-color: white;
   color: yellow;
   border: none;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -275,8 +348,56 @@
   background-color: yellow;
   color: white;
 }
+.edit,.delete {
+  margin-left: 10px;
+}
+.edit button {
+  padding: 4px 8px;
+  text-align: center;
+  background-color: white;
+  font-size: 30px;
+  color: blue;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.edit button:hover {
+  background-color: blue;
+  color: white;
+}
+.delete button {
+  padding: 4px 8px;
+  text-align: center;
+  background-color: white;
+  font-size: 30px;
+  color: red;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.delete button:hover {
+  background-color: red;
+  color: white;
+}
 .replies {
   margin-left: 20px;
+}
+.replybutton button {
+  padding: 4px 8px;
+  text-align: center;
+  background-color: white;
+  font-size: 20px;
+  color: indigo;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.replybutton button:hover {
+  background-color: indigo;
+  color: white;
 }
 
 </style>
