@@ -4,7 +4,6 @@
   <!--Add thread -->
   <div class="container">
     <div class="addthread"><button @click="showCreateThread = !showCreateThread">Add Thread</button> </div>
-    <div class="addthread"><router-link :to="`/likedThread`">View Liked</router-link></div>
     <br>
     <div v-if="showCreateThread" class="create-thread">
       <div class="popup-content">
@@ -23,7 +22,7 @@
       <h3>Edit Thread</h3><br>
       <p><input type="text" v-model="updatedThread.description" placeholder="Enter updated description" style="width: 450px; height: 300px;"></p>
       <div class="editactions">
-      <div class="editbutton"><button @click="updateThread">Update Thread</button></div>
+      <div class="editbutton"><button @click="editThread()">Update Thread</button></div>
       <div class="cancel"><button @click="cancelEdit">Cancel</button></div>
     </div>
     </div></div>
@@ -33,18 +32,19 @@
     <div class="thread-container">
       <div v-for="thread in threads" :key="thread.id" class="thread-info">
         <h2>{{ thread.title }}</h2>
-        <p>Description: {{ thread.raw }}</p>
         <p>Created at: {{ thread.created_at }}</p>
-        <p>Reply count: {{ thread.reply_count }}</p>
+        <p>Reply count: {{ thread.posts_count-1 }}</p>
+        <p>Like count: {{thread.like_count}}</p>
         <p class="replybutton"><router-link :to="`/thread_replies?id=${thread.id}`"><button>View Replies</button></router-link></p>
         <div class="actions">
           <div class="actionsleft">
-        <p class="like"><button @click="toggleLike(thread)" :class="{ liked: thread.liked }"></button></p>
-        <p class="bookmark"><button @click="toggleBookmark(thread)" :class="{ bookmarked: thread.bookmarked }">⛊</button></p>
+        <p class="like" v-if="!thread.liked"><button @click="toggleLike(thread)" :class="{ liked: thread.liked }"><i class="bi bi-hand-thumbs-up-fill"></i></button></p>
+        <p class="like" v-else><button @click="toggleLike(thread)" :class="{ liked: thread.liked }"><i class="bi bi-hand-thumbs-down-fill"></i></button></p>
+        <p class="bookmark"><button @click="toggleBookmark(thread)" :class="{ bookmarked: thread.bookmarked }"><i class="bi bi-bookmark-fill"></i></button></p>
       </div>
         <div class="actionsright">
-        <p class="edit"><button @click="showEditForm = true; setThreadToUpdate(thread)"></button></p>
-        <p class="delete"><button @click="deleteThread(thread.id)"></button></p>
+        <p class="edit"><button @click="showEditForm = true; setThreadToUpdate(thread)"><i class="bi bi-pencil-square"></i></button></p>
+        <p class="delete"><button @click="deleteThread(thread.id)"><i class="bi bi-trash-fill"></i></button></p>
       </div>
       </div>
       </div>
@@ -82,6 +82,7 @@
         this.showCreateThread = !this.showCreateThread;
       },
     async fetchThreads() {
+    console.log("Fetching...")
       try {
         const response = await axios.get('/api/thread');
         //Below api is just for trial
@@ -116,13 +117,21 @@
     },
     async toggleLike(item) {
       // Implement like functionality
-      console.log('Like clicked for:', item.id);
+      // console.log('Like clicked for:', item.liked);
       var form = new FormData();
       form.append("id", item.id);
+      var m = "";
+      if(item.liked) m = "DELETE";
+      else m = "POST";
+      console.log(m);
       await fetch("http://127.0.0.1:5000/api/like", {
-        method: 'POST',
-        body: form
+        method: m,
+        body: form,
+        headers: {
+          'secret_authtoken' : localStorage.getItem("token")
+        }
       });
+      this.fetchThreads();
     },
     async toggleBookmark(item) {
       // Implement bookmark functionality
@@ -131,7 +140,10 @@
       form.append("id", item.id);
       await fetch("http://127.0.0.1:5000/api/bookmark", {
         method: 'POST',
-        body: form
+        body: form,
+        headers: {
+          'secret_authtoken' : localStorage.getItem("token")
+        }
       });
     },
     async editThread() {
@@ -143,7 +155,10 @@
         console.log(this.updatedThread.description);
         const response = await fetch('http://127.0.0.1:5000/api/thread', {
           method: 'PUT',
-          body: form
+          body: form,
+          headers: {
+            'secret_authtoken' : localStorage.getItem("token")
+          }
         });
         console.log('Thread updated:', response.data);
         this.updatedThread.id = '';
@@ -158,8 +173,14 @@
     },
     async deleteThread(threadId) {
       try {
-        const response = await axios.delete(`/api/thread?id=${threadId}`);
-        console.log('Thread deleted:', response.data);
+        //const response = await axios.delete(`/api/thread?id=${threadId}`);
+        await fetch(`http://127.0.0.1:5000/api/thread?id=${threadId}`, {
+          method: 'DELETE',
+          headers: {
+            'secret_authtoken' : localStorage.getItem("token")
+          }
+        })
+        //console.log('Thread deleted:', response.data);
         await this.fetchThreads(); // Fetch threads again to update the list
       } catch (error) {
         console.error('Error deleting thread:', error);
