@@ -60,18 +60,30 @@ export default {
                 form.append("description", this.replyContent);
                 form.append("id", this.id);
                 // const response = await axios.post('http://127.0.0.1:5000/api/thread', data_table, {headers: {'Content-Type': 'application/json'}});
-                const response = await fetch('http://127.0.0.1:5000/api/reply', {
+                await fetch('http://127.0.0.1:5000/api/reply', {
                     method: 'POST',
                     body: form,
                     headers: {
                         'secret_authtoken': localStorage.getItem("token")
                     }
+                }).then(res=>res.json())
+                .then(res=>{
+                  if(res >= 5){
+                    fetch("https://chat.googleapis.com/v1/spaces/AAAAE--qWwU/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=i0QZFXd_dVkgMTq5Ye7lbiOxrLkTGY1IIDTqUqW-k_Q", {
+                      headers: {
+                        'Content-Type' : "application/json"
+                      },
+                      method: 'POST',
+                      body: JSON.stringify({'text': `PRIORITY NOTIFICATION : ${this.replies[0].cooked}`})
+                    })
+                  }
                 })
-                console.log('Replyed ', response.data);
+                // console.log('Replyed ', response.data);
                 // Reset the reply form after submission
                 this.replyContent = '';
                 // Close the reply form
                 this.showReplyForm = false;
+                this.fetchReplies(this.id);
             } catch (error) {
                 console.error('Error creating thread:', error);
             }
