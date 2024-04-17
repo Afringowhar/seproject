@@ -4,6 +4,7 @@
   <!--Add thread -->
   <div class="container">
     <div class="addthread"><button @click="showCreateThread = !showCreateThread">Add Thread</button> </div>
+    <div class="addthread"><router-link :to="`/likedThread`">View Liked</router-link></div>
     <br>
     <div v-if="showCreateThread" class="create-thread">
       <div class="popup-content">
@@ -28,9 +29,10 @@
     <div class="thread-container">
       <div v-for="thread in threads" :key="thread.id" class="thread-info">
         <h2>{{ thread.title }}</h2>
-        <p>Created by: {{ thread.created_by }}</p>
+        <p>Description: {{ thread.raw }}</p>
         <p>Created at: {{ thread.created_at }}</p>
         <p>Reply count: {{ thread.reply_count }}</p>
+        <router-link :to="`/thread_replies?id=${threadId}`">View Replies</router-link>
         <div class="actions">
         <div class="like"><button @click="toggleLike(thread)"></button></div>
         <div class="bookmark"><button @click="toggleBookmark(thread)">⛊</button></div>
