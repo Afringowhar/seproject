@@ -12,11 +12,11 @@
       </div>
     </div>
   </template>
-  
-  
+
+
   <script>
   //import axios from 'axios';
-  
+
   export default {
     data() {
       return {
@@ -24,7 +24,7 @@
       };
     },
     created() {
-      const threadId = this.$route.params.id;
+      const threadId = this.$route.query.id;
       this.fetchReplies(threadId);
     },
     methods: {
@@ -42,20 +42,19 @@
     }
   };
   </script>
-  
+
   <style scoped>
   .container {
     margin: 20px;
   }
-  
+
   .replies-container {
     margin-top: 20px;
   }
-  
+
   .reply-info {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
   }
   </style>
-  

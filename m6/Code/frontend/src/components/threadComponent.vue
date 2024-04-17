@@ -32,7 +32,7 @@
         <p>Description: {{ thread.raw }}</p>
         <p>Created at: {{ thread.created_at }}</p>
         <p>Reply count: {{ thread.reply_count }}</p>
-        <router-link :to="`/thread_replies?id=${threadId}`">View Replies</router-link>
+        <router-link :to="`/thread_replies?id=${thread.id}`">View Replies</router-link>
         <div class="actions">
         <div class="like"><button @click="toggleLike(thread)"></button></div>
         <div class="bookmark"><button @click="toggleBookmark(thread)">⛊</button></div>
