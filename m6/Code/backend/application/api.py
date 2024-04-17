@@ -1057,7 +1057,7 @@ class Reply(Resource):
     @marshal_with(posts_json)
     def get(self):
         #url = "http://localhost:4200/t/blah/"+str(request.form.get("id"))+".json"
-        url = "http://localhost:4200/t/"+str(request.form.get("id"))+".json"
+        url = "http://localhost:4200/t/"+str(request.args.get("id"))+".json"
         headers = { "Api-Key" : GLOBAL_API,
                     "Api-Username" : "21f1002269"}
         response = convert(requests.get(url, headers=headers).content)
@@ -1066,7 +1066,7 @@ class Reply(Resource):
     def post(user, self):
         url = "http://localhost:4200/posts.json"
         headers = { "Api-Key" : GLOBAL_API,
-                    "Api-Username" : "afreen",
+                    "Api-Username" : user.user_name,
                     "Content-Type" : "application/json"}
         params = {"raw": request.form.get("description"), "topic_id": request.form.get("id")}
         # print(request.form.get("title"))
