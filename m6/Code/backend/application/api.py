@@ -38,7 +38,7 @@ def convert(content):
 def get_post_id(id):
     url = "http://localhost:4200/t/"+str(id)+".json"
     headers = { "Api-Key" : ADMIN_API,
-                "Api-Username" : "21f1002269"}
+                "Api-Username" : "21f2000280"}
     response = requests.get(url, headers=headers)
     dict_str = convert(response.content)
     post_id = dict_str['post_stream']['posts'][0]['id']
@@ -240,7 +240,7 @@ class UserAPI(Resource):
             db.session.commit()
             url = "http://localhost:4200/users.json"
             headers = { "Api-Key" : ADMIN_API,
-                        "Api-Username" : "21f1002269",
+                        "Api-Username" : "21f2000280",
                         "Content-Type" : "application/json"}
             params = {"name": user_name, "email": user_name+"@test.com", "password": "ThisIsASecurePassword", "username": user_name, "approved": "true"}
             user_id = convert(requests.post(url, params=params, headers=headers).content)["user_id"]
@@ -996,6 +996,17 @@ class CategoryAPI(Resource):
         else:
             abort(403,message="Unauthorized")
 
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
 
 
 class Try(Resource):
@@ -1025,7 +1036,7 @@ class Thread(Resource):
         headers = { "Api-Key" : GLOBAL_API,
                     "Api-Username" : user.user_name,
                     "Content-Type" : "application/json"}
-        params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": "5"}
+        params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": "4"}
         # print(request.form.get("title"))
         # print(request.form.get("description"))
         # params = {"title": request.form.get("title"), "raw": request.form.get("description"), "category": request.form.get("category")}
@@ -1052,7 +1063,7 @@ class Thread(Resource):
     def delete(user, self):
         url = "http://localhost:4200/t/"+str(request.args.get("id"))+".json"
         headers = { "Api-Key" : ADMIN_API,
-                    "Api-Username" : "21f1002269"}
+                    "Api-Username" : "21f2000280"}
         response = requests.delete(url, headers=headers)
         return None
 
@@ -1062,7 +1073,7 @@ class Reply(Resource):
         #url = "http://localhost:4200/t/blah/"+str(request.form.get("id"))+".json"
         url = "http://localhost:4200/t/"+str(request.args.get("id"))+".json"
         headers = { "Api-Key" : GLOBAL_API,
-                    "Api-Username" : "21f1002269"}
+                    "Api-Username" : "21f2000280"}
         response = convert(requests.get(url, headers=headers).content)
         return response['post_stream']['posts']
     @token_required
@@ -1079,7 +1090,7 @@ class Reply(Resource):
         dict_str = convert(response.content)
         url = "http://localhost:4200/t/"+request.form.get("id")+".json"
         headers = { "Api-Key" : ADMIN_API,
-                    "Api-Username" : "21f1002269"}
+                    "Api-Username" : "21f2000280"}
         response = convert(requests.get(url, headers=headers).content)
         # print(dict_str)
         print(response['posts_count']-1)
@@ -1091,7 +1102,7 @@ class Reply(Resource):
 #         url = "http://localhost:4200/posts.json"
 #         params = {"title": "Just a random title", "raw": "Random description for the new post", "category": 5}
 #         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
-#                     "Api-Username" : "21f1002269",
+#                     "Api-Username" : "21f2000280",
 #                     "Content-Type" : "application/json"}
 #         # Make a get request with the parameters.
 #         response = requests.post(url, params=params, headers=headers)
@@ -1113,7 +1124,7 @@ class Reply(Resource):
 #     def put(self):
 #         url = "http://localhost:4200/posts/"+str(request.form.get("id"))+".json"
 #         headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a"
-#                    ,"Api-Username" : "21f1002269",
+#                    ,"Api-Username" : "21f2000280",
 #                    "Content-Type" : "application/json"}
 #         params = {"post": {"raw": request.form.get("description")}}
 #         response = requests.put(url, json=params, headers=headers)
@@ -1124,7 +1135,7 @@ class LikeAPI(Resource):
     def get(self):
         url = "http://localhost:4200/t/"+request.form.get("id")+".json"
         headers = { "Api-Key" : GLOBAL_API,
-                   "Api-Username" : "21f1002269"}
+                   "Api-Username" : "21f2000280"}
         # params = {
         #     "postid": request.args.get("postid")
         # }
@@ -1167,7 +1178,7 @@ class BookmarkAPI(Resource):
     # def get(self):
     #     url = "http://localhost:4200/api/bookmark"
     #     headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a",
-    #                "Api-Username" : "21f1002269"}
+    #                "Api-Username" : "21f2000280"}
     #     params = {
     #         "userid": request.args.get("userid")
     #     }
@@ -1190,7 +1201,7 @@ class BookmarkAPI(Resource):
     # def delete(self):
     #     url = "http://localhost:4200/api/bookmark"
     #     headers = { "Api-Key" : "357e339fd825907f23f741bb333e9de0f8ddcd7b12b8b7d5f9f5c08f5302b30a"
-    #                ,"Api-Username" : "21f1002269",
+    #                ,"Api-Username" : "21f2000280",
     #                "Content-Type" : "application/json"}
     #     params = {
     #         "postid": request.form.get("postid"),
